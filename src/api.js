@@ -9,7 +9,7 @@ export async function getQuiz(id) {
 }
 
 export async function getAllQuizzes() {
-  const response = await fetch(`${API_BASE_URL}/quizzes`);
+  const response = await fetch(`${API_BASE_URL}/get_all_quizzes`);  // ← změna zde
   if (!response.ok) {
     throw new Error("Chyba při načítání seznamu kvízů");
   }
