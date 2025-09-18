@@ -11,7 +11,7 @@ function App() {
     fetch('https://quiz-backend-uoqh.onrender.com/get_all_quizzes')
       .then((res) => res.json())
       .then((data) => setQuizzes(data))
-      .catch((err) => setError('Chyba při načítání seznamu kvízů'));
+      .catch(() => setError('Chyba při načítání seznamu kvízů'));
   }, []);
 
   // Načti konkrétní kvíz po výběru
@@ -20,7 +20,7 @@ function App() {
     fetch(`https://quiz-backend-uoqh.onrender.com/get_quiz?id=${selectedQuizId}`)
       .then((res) => res.json())
       .then((data) => setQuiz(data))
-      .catch((err) => setError('Chyba při načítání kvízu'));
+      .catch(() => setError('Chyba při načítání kvízu'));
   }, [selectedQuizId]);
 
   if (error) return <div style={{ color: 'red' }}>{error}</div>;
@@ -37,7 +37,7 @@ function App() {
             {quizzes.map((q) => (
               <li key={q.id}>
                 <button onClick={() => setSelectedQuizId(q.id)}>
-                  {q.title} ({q.id})
+                  {q.title}
                 </button>
               </li>
             ))}
