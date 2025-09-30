@@ -31,3 +31,16 @@ export async function submitAnswers(data) {
 
   return await response.json();
 }
+
+// 🔹 Nová funkce na získání výsledků
+export async function getResults(userName = null) {
+  let url = `${API_BASE_URL}/get_results`;
+  if (userName) {
+    url += `?user_name=${encodeURIComponent(userName)}`;
+  }
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Chyba při načítání výsledků");
+  }
+  return await response.json();
+}
