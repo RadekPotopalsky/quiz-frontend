@@ -1,0 +1,10 @@
+{
+  "title": "Velká Morava",
+  "questions": [
+    {
+      "question": "Kdo byli první obyvatelé?",
+      "options": ["Germáni", "Slované", "Římané", "Maďaři"],
+      "correct": 1
+    }
+  ]
+}
