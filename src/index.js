@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import QuizList from "./pages/QuizList";
 import Quiz from "./pages/Quiz";
 import Stats from "./pages/Stats";
+import ResultDetail from "./pages/ResultDetail"; // přidáno
 import "./styles.css";
 
 const container = document.getElementById("root");
@@ -21,6 +22,7 @@ root.render(
       <Route path="/" element={<QuizList />} />
       <Route path="/quiz/:id" element={<Quiz />} />
       <Route path="/stats" element={<Stats />} />
+      <Route path="/result/:id" element={<ResultDetail />} /> {/* OPRAVA */}
       <Route path="*" element={<QuizList />} />
     </Routes>
   </BrowserRouter>
