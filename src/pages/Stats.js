@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { getResults } from "../api";
+import { Link } from "react-router-dom";
+
+const API_BASE = process.env.REACT_APP_API_BASE || "https://quiz-backend-uoqh.onrender.com";
 
 export default function Stats() {
   const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    getResults()
+    fetch(`${API_BASE}/get_results`)
+      .then((res) => res.json())
       .then((data) => setResults(data))
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+      .catch((err) => console.error("Chyba při načítání výsledků:", err));
   }, []);
-
-  if (loading) return <div>Načítám výsledky...</div>;
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
 
   const getColor = (percentage) => {
     if (percentage >= 85) return "#c8e6c9"; // zelená
@@ -25,36 +22,36 @@ export default function Stats() {
   return (
     <div style={{ padding: 20 }}>
       <h2>Statistiky</h2>
-      {results.length === 0 ? (
-        <p>Zatím nejsou žádné výsledky.</p>
-      ) : (
-        <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
-          <thead>
-            <tr>
-              <th>ID výsledku</th>
-              <th>Uživatel</th>
-              <th>Kvíz</th>
-              <th>Skóre</th>
-              <th>%</th>
-              <th>Datum</th>
+      <table border="1" cellPadding="6" style={{ borderCollapse: "collapse", width: "100%" }}>
+        <thead>
+          <tr>
+            <th>ID výsledku</th>
+            <th>Uživatel</th>
+            <th>Kvíz</th>
+            <th>Skóre</th>
+            <th>%</th>
+            <th>Datum</th>
+            <th>Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          {results.map((r) => (
+            <tr key={r.id}>
+              <td>{r.id}</td>
+              <td>{r.user_name}</td>
+              <td>{r.quiz_title || r.quiz_id}</td>
+              <td>{r.score}/{r.total}</td>
+              <td style={{ backgroundColor: getColor(r.percentage) }}>
+                {r.percentage}%
+              </td>
+              <td>{new Date(r.created_at).toUTCString()}</td>
+              <td>
+                <Link to={`/result/${r.id}`}>Detail</Link>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {results.map((r) => (
-              <tr key={r.id}>
-                <td>{r.id}</td>
-                <td>{r.user_name}</td>
-                <td>{r.quiz_title || r.quiz_id}</td>
-                <td>{r.score}/{r.total}</td>
-                <td style={{ backgroundColor: getColor(r.percentage) }}>
-                  {r.percentage}%
-                </td>
-                <td>{r.created_at}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
