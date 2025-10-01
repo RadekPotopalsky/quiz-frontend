@@ -13,7 +13,6 @@ export default function Quiz() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // načtení kvízu
   useEffect(() => {
     fetch(`${API_BASE}/get_quiz?id=${id}`)
       .then((res) => res.json())
@@ -74,12 +73,8 @@ export default function Quiz() {
       )}
 
       {quiz.questions.map((q, qIndex) => {
-        const selected = answers[qIndex];
-        const correctAnswer = result
-          ? result.details.find((d) => d.index === qIndex).correct
-          : null;
-        const userAnswer = result
-          ? result.details.find((d) => d.index === qIndex).user_answer
+        const detail = result
+          ? result.details.find((d) => d.index === qIndex)
           : null;
 
         return (
@@ -99,12 +94,12 @@ export default function Quiz() {
             </p>
             {q.options.map((opt, optIndex) => {
               let style = {};
-              if (result) {
-                if (opt === correctAnswer && opt === userAnswer) {
+              if (result && detail) {
+                if (optIndex === detail.correct_index && optIndex === detail.user_index) {
                   style = { backgroundColor: "#c8e6c9" }; // zeleně správně vybrané
-                } else if (opt === userAnswer && opt !== correctAnswer) {
+                } else if (optIndex === detail.user_index && optIndex !== detail.correct_index) {
                   style = { backgroundColor: "#ffcdd2" }; // červeně špatně vybrané
-                } else if (opt === correctAnswer && opt !== userAnswer) {
+                } else if (optIndex === detail.correct_index && optIndex !== detail.user_index) {
                   style = { backgroundColor: "#e0e0e0" }; // šedě správná, ale nevybraná
                 }
               }
@@ -124,7 +119,7 @@ export default function Quiz() {
                     type="radio"
                     name={`q-${qIndex}`}
                     value={optIndex}
-                    checked={selected === optIndex}
+                    checked={answers[qIndex] === optIndex}
                     onChange={() => handleChange(qIndex, optIndex)}
                     disabled={!!result}
                   />{" "}
