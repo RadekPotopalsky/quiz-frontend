@@ -48,7 +48,9 @@ export default function QuizList() {
               <td>{q.avg_success}%</td>
               <td>{q.attempts}</td>
               <td>
-                <button style={{ padding: "4px 10px" }}>Statistika</button>
+                <Link to={`/stats/${q.id}`}>
+                  <button style={{ padding: "4px 10px" }}>Statistika</button>
+                </Link>
               </td>
               <td>
                 <button style={{ padding: "4px 10px", backgroundColor: "#f44336", color: "#fff" }}>

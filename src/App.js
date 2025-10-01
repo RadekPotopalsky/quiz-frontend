@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import QuizList from "./pages/QuizList";
 import Quiz from "./pages/Quiz";
 import Stats from "./pages/Stats";
-import ResultDetail from "./pages/ResultDetail"; // ← přidali jsme novou stránku
+import ResultDetail from "./pages/ResultDetail";
+import StatsByQuiz from "./pages/StatsByQuiz"; // nová stránka
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
         <Route path="/" element={<QuizList />} />
         <Route path="/quiz/:id" element={<Quiz />} />
         <Route path="/stats" element={<Stats />} />
-        <Route path="/result/:id" element={<ResultDetail />} /> {/* ← nová route */}
+        <Route path="/stats/:quizId" element={<StatsByQuiz />} /> {/* nová route */}
+        <Route path="/result/:id" element={<ResultDetail />} />
       </Routes>
     </Router>
   );

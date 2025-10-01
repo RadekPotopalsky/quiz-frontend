@@ -28,6 +28,12 @@ export async function getResults() {
   return await response.json();
 }
 
+export async function getResultsByQuiz(quizId) {
+  const response = await fetch(`${API_BASE_URL}/get_results_by_quiz?quiz_id=${quizId}`);
+  if (!response.ok) throw new Error("Chyba při načítání výsledků kvízu");
+  return await response.json();
+}
+
 export async function getResult(id) {
   const response = await fetch(`${API_BASE_URL}/get_result?id=${id}`);
   if (!response.ok) throw new Error("Chyba při načítání výsledku");
