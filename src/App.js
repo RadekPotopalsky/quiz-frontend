@@ -16,8 +16,8 @@ function App() {
       <Routes>
         <Route path="/" element={<QuizList />} />
         <Route path="/quiz/:id" element={<Quiz />} />
+        <Route path="/stats/:quizId" element={<StatsByQuiz />} /> {/* musí být před /stats */}
         <Route path="/stats" element={<Stats />} />
-        <Route path="/stats/:quizId" element={<StatsByQuiz />} /> {/* nová route */}
         <Route path="/result/:id" element={<ResultDetail />} />
       </Routes>
     </Router>
