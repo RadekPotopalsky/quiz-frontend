@@ -28,14 +28,22 @@ export async function getResults() {
   return await response.json();
 }
 
+export async function getResult(id) {
+  const response = await fetch(`${API_BASE_URL}/get_result?id=${id}`);
+  if (!response.ok) throw new Error("Chyba při načítání výsledku");
+  return await response.json();
+}
+
 export async function getResultsByQuiz(quizId) {
   const response = await fetch(`${API_BASE_URL}/get_results_by_quiz?quiz_id=${quizId}`);
   if (!response.ok) throw new Error("Chyba při načítání výsledků kvízu");
   return await response.json();
 }
 
-export async function getResult(id) {
-  const response = await fetch(`${API_BASE_URL}/get_result?id=${id}`);
-  if (!response.ok) throw new Error("Chyba při načítání výsledku");
+export async function deleteQuiz(id) {
+  const response = await fetch(`${API_BASE_URL}/delete_quiz?id=${id}`, {
+    method: "DELETE",
+  });
+  if (!response.ok) throw new Error("Chyba při mazání kvízu");
   return await response.json();
 }

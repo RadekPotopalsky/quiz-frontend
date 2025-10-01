@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllQuizzes } from "../api";
+import { getAllQuizzes, deleteQuiz } from "../api";
 
 export default function QuizList() {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
 
+  const loadQuizzes = async () => {
+    try {
+      const list = await getAllQuizzes();
+      setQuizzes(list);
+    } catch (e) {
+      setErr(String(e));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const list = await getAllQuizzes();
-        setQuizzes(list);
-      } catch (e) {
-        setErr(String(e));
-      } finally {
-        setLoading(false);
-      }
-    })();
+    loadQuizzes();
   }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Opravdu chceš smazat tento kvíz včetně výsledků?")) return;
+    try {
+      await deleteQuiz(id);
+      await loadQuizzes(); // refresh seznamu po smazání
+    } catch (e) {
+      alert("Chyba při mazání: " + e.message);
+    }
+  };
 
   if (loading) return <p>Načítám kvízy…</p>;
   if (err) return <p style={{ color: "crimson" }}>Chyba: {err}</p>;
@@ -53,7 +65,10 @@ export default function QuizList() {
                 </Link>
               </td>
               <td>
-                <button style={{ padding: "4px 10px", backgroundColor: "#f44336", color: "#fff" }}>
+                <button
+                  onClick={() => handleDelete(q.id)}
+                  style={{ padding: "4px 10px", backgroundColor: "#f44336", color: "#fff" }}
+                >
                   Delete
                 </button>
               </td>
