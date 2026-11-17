@@ -9,3 +9,52 @@
 .form-panel{padding:24px;margin-bottom:25px}.form-panel h2{font-size:1.25rem}.form-grid{display:grid;grid-template-columns:2fr 1fr;gap:16px}.upload-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.upload-button{position:relative;overflow:hidden;cursor:pointer}.upload-button input{position:absolute;inset:0;opacity:0;cursor:pointer}.file-list{background:#f5f8fc;padding:14px;border-radius:12px;margin:0 0 20px}.file-list>div{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #e5ebf4;padding-top:9px;margin-top:9px;font-weight:400;overflow-wrap:anywhere}.draft-section{margin-top:36px}.draft-title,.draft-question{display:block;padding:22px;margin-bottom:14px}.draft-question>label{margin-top:16px}.draft-options{display:grid;gap:7px;margin-top:14px}.draft-options>div{display:flex;align-items:center;gap:10px}.draft-options input[type=text],.draft-options input:not([type=radio]){width:100%;padding:9px 11px;border:1px solid #cdd8e6;border-radius:9px}.draft-options input[type=radio]{width:20px;height:20px;accent-color:#255fc3}.account-row .button{flex:none}
 .file-thumb{width:48px;height:58px;object-fit:cover;border-radius:6px;flex:none}
 @media(max-width:700px){.header-inner{padding:12px 16px;gap:9px;flex-wrap:wrap}.brand{flex:1}.site-header nav{order:3;width:100%;flex:none;gap:14px;overflow-x:auto;white-space:nowrap;flex-wrap:nowrap;padding:8px 0 2px}.site-header nav a{font-size:.88rem}.user-box span{display:none}.page-shell{padding:22px 16px 60px}.page-heading{align-items:start;flex-direction:column}.quiz-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr;gap:0}.question-panel{padding:20px}.option{align-items:flex-start}.card-actions .button{flex:1}.result-row{padding:15px}.upload-actions .button{width:100%}}
+
+.site-header{position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(28,48,81,.06)}
+.header-create{flex:none}
+.header-create-short{display:none}
+.quiz-grid{gap:14px}
+.quiz-card{padding:18px;min-height:190px}
+.quiz-card h2{margin:12px 0 6px}
+.quiz-card p{margin-bottom:12px}
+.quiz-summary{color:#687489}
+.quiz-summary strong{display:inline-block;padding:2px 6px;border-radius:7px;font-weight:800}
+.score-tone-high{color:#167344!important}
+.score-tone-medium{color:#906000!important}
+.score-tone-low{color:#b5363e!important}
+.quiz-summary .score-tone-high{background:#e7f7eb}
+.quiz-summary .score-tone-medium{background:#fff4ce}
+.quiz-summary .score-tone-low{background:#ffebed}
+.preference-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:-3px 0 18px}
+.preference-saved{color:#176b34;font-size:.88rem}
+.auto-textarea{min-height:46px;overflow:hidden;resize:none;line-height:1.5;touch-action:pan-y}
+.draft-options textarea{flex:1;min-width:0;width:100%;padding:9px 11px;border:1px solid #cdd8e6;border-radius:9px;color:#18212f;background:#fff}
+.draft-options>div{align-items:flex-start}
+.draft-options input[type=radio]{flex:none;margin-top:14px}
+.camera-overlay{position:fixed;inset:0;z-index:200;background:rgba(11,21,37,.88);display:flex;align-items:center;justify-content:center;padding:12px}
+.camera-dialog{width:min(100%,760px);height:min(92dvh,900px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:18px}
+.camera-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 18px}
+.camera-header strong,.camera-header span{display:block}
+.camera-header span{font-size:.85rem;color:#687489;margin-top:3px}
+.camera-close{width:40px;height:40px;border:0;background:#f0f3f8;border-radius:10px;font-size:1.7rem;line-height:1}
+.camera-preview{position:relative;flex:1;min-height:180px;display:grid;place-items:center;overflow:hidden;background:#0b1525}
+.camera-preview video,.camera-preview img{width:100%;height:100%;object-fit:contain}
+.camera-preview img{position:absolute;inset:0}
+.camera-dialog .error{margin:10px 14px 0}
+.camera-actions{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px 4px}
+.camera-hint{font-size:.82rem;color:#687489;margin:2px 16px 12px;text-align:right}
+.camera-fallback{align-self:flex-end;margin:8px 16px 14px}
+
+@media(max-width:700px){
+  .header-inner{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding:9px 12px}
+  .brand{min-width:0;font-size:.92rem;white-space:normal;line-height:1.15}
+  .site-header nav{grid-column:1/-1;order:initial;width:100%;padding:3px 0 1px;gap:17px}
+  .header-create{padding:7px 9px;min-height:38px;font-size:.85rem}
+  .header-create-full{display:none}
+  .header-create-short{display:inline}
+  .user-box{gap:0}
+  .user-box .link-button{font-size:.82rem;padding:3px}
+  .camera-overlay{padding:0}
+  .camera-dialog{height:100dvh;border-radius:0}
+  .camera-actions .button{flex:1;padding:9px 7px;min-width:0}
+}

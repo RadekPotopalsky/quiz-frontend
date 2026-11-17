@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getResults } from "../api";
+import scoreTone from "../scoreTone";
 
 export function ResultsList({ results }) {
   if (!results.length) return <div className="panel empty">Zatím tu nejsou žádné výsledky.</div>;
   return <div className="result-list">{results.map(r => <Link to={`/result/${r.id}`} className="panel result-row" key={r.id}>
     <div><strong>{r.quiz_title || "Smazaný kvíz"}</strong><div className="muted">{r.user_name} · {new Date(r.created_at).toLocaleString("cs-CZ")}</div></div>
-    <div className="score"><strong>{r.percentage}%</strong><span>{r.score}/{r.total}</span></div></Link>)}</div>;
+    <div className={`score score-tone-${scoreTone(r.percentage)}`}><strong>{r.percentage}%</strong><span>{r.score}/{r.total}</span></div></Link>)}</div>;
 }
 
 export default function Stats() {

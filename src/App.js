@@ -55,8 +55,9 @@ export default function App() {
     <header className="site-header"><div className="header-inner">
       <Link className="brand" to="/"><span className="brand-mark small">?</span><span>Kvízy z učebnice</span></Link>
       <nav aria-label="Hlavní navigace"><Link to="/">Kvízy</Link><Link to="/stats">Výsledky</Link>
-        {admin && <><Link to="/create">Nový kvíz</Link><Link to="/accounts">Účty</Link></>}
-      </nav><div className="user-box"><span>{account.username}</span><button className="link-button" onClick={() => { setToken(null); setAccount(null); }}>Odhlásit</button></div>
+        {admin && <Link to="/accounts">Účty</Link>}
+      </nav>{admin && <Link className="button primary header-create" to="/create"><span className="header-create-full">+ Vytvořit kvíz</span><span className="header-create-short">+ Kvíz</span></Link>}
+      <div className="user-box"><span>{account.username}</span><button className="link-button" onClick={() => { setToken(null); setAccount(null); }}>Odhlásit</button></div>
     </div></header>
     <div className="page-shell"><Routes>
       <Route path="/" element={<QuizList admin={admin} />} />

@@ -38,5 +38,7 @@ export const deleteQuiz = (id) => api(`/delete_quiz?id=${qs(id)}`, { method: "DE
 export const createQuiz = (quiz) => api("/create_quiz", { method: "POST", body: JSON.stringify(quiz) });
 export const generateQuiz = (form) => api("/admin/generate-quiz", { method: "POST", body: form });
 export const getAccounts = () => api("/admin/accounts");
+export const getPreferences = () => api("/admin/preferences");
+export const savePreferences = (default_audience) => api("/admin/preferences", { method: "PUT", body: JSON.stringify({ default_audience }) });
 export const createAccount = (username, password) => api("/admin/accounts", { method: "POST", body: JSON.stringify({ username, password }) });
 export const changePassword = (id, password) => api(`/admin/accounts/${qs(id)}/password`, { method: "POST", body: JSON.stringify({ password }) });

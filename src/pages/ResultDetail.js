@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getResult } from "../api";
+import scoreTone from "../scoreTone";
 
 export default function ResultDetail() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ export default function ResultDetail() {
   if (!result) return <p>Načítám výsledek…</p>;
   return <main className="narrow"><Link className="back-link" to="/stats">← Zpět na výsledky</Link>
     <div className="panel result-hero"><span className="eyebrow">Hotovo · {result.user_name}</span><h1>{result.quiz_title}</h1>
-      <div className="big-score">{result.percentage}%</div><p>Správně {result.score} z {result.total} otázek</p></div>
+      <div className={`big-score score-tone-${scoreTone(result.percentage)}`}>{result.percentage}%</div><p>Správně {result.score} z {result.total} otázek</p></div>
     <h2 className="section-heading">Odpovědi a vysvětlení</h2>
     {result.answers.map((answer, index) => <article className="panel answer-card" key={index}>
       <div className="answer-heading"><span className={`tag ${answer.is_correct ? "success" : "failure"}`}>{answer.is_correct ? "Správně" : "K opravě"}</span>
