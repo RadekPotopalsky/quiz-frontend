@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createQuiz, generateQuiz } from "../api";
+import shuffleQuiz from "../shuffleQuiz";
 
 const DRAFT_KEY = "quiz_draft_v2";
 
@@ -38,7 +39,7 @@ export default function CreateQuiz() {
     files.forEach(file => form.append("images", file));
     form.append("audience", audience); form.append("topic", topic); form.append("question_count", count);
     setBusy(true);
-    try { setDraft(await generateQuiz(form)); }
+    try { setDraft(shuffleQuiz(await generateQuiz(form))); }
     catch (e) { setError(e.message); }
     finally { setBusy(false); }
   };
@@ -72,6 +73,8 @@ export default function CreateQuiz() {
     {error && <p className="error" role="alert">{error}</p>}
     {draft && <section className="draft-section"><div className="page-heading"><div><span className="eyebrow">Ke kontrole</span><h2>2. Zkontroluj otázky a citace</h2>
       <p>Návrh je uložený v této kartě prohlížeče. Před zveřejněním ověř správné odpovědi a doslovnost citací podle fotek.</p></div></div>
+      <button type="button" className="button secondary" disabled={busy} onClick={() => setDraft(current => shuffleQuiz(current))}>Promíchat odpovědi</button>
+      <p className="hint">Pořadí možností se změní, správná odpověď a citace zůstanou zachovány.</p>
       <label className="panel draft-title">Název kvízu<input value={draft.title} onChange={e => setDraft({ ...draft, title: e.target.value })} /></label>
       {draft.questions.map((q, index) => <article className="panel draft-question" key={index}>
         <span className="tag">Otázka {index + 1}</span><label>Otázka<textarea value={q.question} onChange={e => editQuestion(index, "question", e.target.value)} rows={2} /></label>
