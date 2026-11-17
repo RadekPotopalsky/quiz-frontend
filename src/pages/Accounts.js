@@ -25,7 +25,7 @@ export default function Accounts() {
     <p>Každý má vlastní přihlášení a své výsledky. Nové účty vytváří jen administrátor.</p></div></div>
     <form className="panel form-panel" onSubmit={add}><h2>Přidat žáka</h2>
       <label>Jméno<input value={username} onChange={e => setUsername(e.target.value)} minLength={2} required /></label>
-      <label>Heslo (alespoň 12 znaků)<input type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} minLength={12} required /></label>
+      <label>Heslo pro žáka (alespoň 4 znaky)<input type="password" autoComplete="new-password" value={password} onChange={e => setPassword(e.target.value)} minLength={4} required /></label>
       <button className="primary">Vytvořit účet</button></form>
     {error && <p className="error" role="alert">{error}</p>}{message && <p className="notice" role="status">{message}</p>}
     <h2 className="section-heading">Účty</h2><div className="result-list">{accounts.map(account => <div className="panel account-row" key={account.id}>
@@ -33,7 +33,7 @@ export default function Accounts() {
       <button className="button secondary" onClick={() => { setResetId(account.id); setResetPassword(""); }}>Změnit heslo</button>
     </div>)}</div>
     {resetId && <form className="panel form-panel" onSubmit={reset}><h2>Nové heslo</h2><p>Pro účet {accounts.find(x => x.id === resetId)?.username}</p>
-      <label>Nové heslo (alespoň 12 znaků)<input type="password" autoComplete="new-password" minLength={12} value={resetPassword} onChange={e => setResetPassword(e.target.value)} required /></label>
+      <label>Nové heslo (alespoň {accounts.find(x => x.id === resetId)?.role === "admin" ? 8 : 4} znaky)<input type="password" autoComplete="new-password" minLength={accounts.find(x => x.id === resetId)?.role === "admin" ? 8 : 4} value={resetPassword} onChange={e => setResetPassword(e.target.value)} required /></label>
       <div className="step-actions"><button type="button" className="button secondary" onClick={() => setResetId(null)}>Zrušit</button><button className="button primary">Uložit heslo</button></div>
     </form>}
   </main>;
