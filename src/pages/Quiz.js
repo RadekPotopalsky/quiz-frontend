@@ -1,159 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
-const API_BASE =
-  process.env.REACT_APP_API_BASE || "https://quiz-backend-uoqh.onrender.com";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getQuiz, submitAnswers } from "../api";
 
 export default function Quiz() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [quiz, setQuiz] = useState(null);
   const [answers, setAnswers] = useState({});
-  const [result, setResult] = useState(null);
-  const [userName, setUserName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    fetch(`${API_BASE}/get_quiz?id=${id}`)
-      .then((res) => res.json())
-      .then((data) => setQuiz(data))
-      .catch(() => setError("Chyba při načítání kvízu"));
-  }, [id]);
-
-  if (error) return <div style={{ color: "red" }}>{error}</div>;
-  if (!quiz) return <div>Načítám kvíz...</div>;
-
-  const handleChange = (qIndex, optIndex) => {
-    setAnswers({
-      ...answers,
-      [qIndex]: optIndex,
-    });
+  const [index, setIndex] = useState(0);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  useEffect(() => { getQuiz(id).then(setQuiz).catch(e => setError(e.message)); }, [id]);
+  if (error && !quiz) return <p className="error" role="alert">{error}</p>;
+  if (!quiz) return <p>Načítám kvíz…</p>;
+  const question = quiz.questions[index];
+  const answered = Object.keys(answers).length;
+  const submit = async () => {
+    if (answered !== quiz.questions.length) { setError("Nejdřív odpověz na všechny otázky."); return; }
+    setBusy(true); setError("");
+    try { const result = await submitAnswers(quiz.id, answers); navigate(`/result/${result.result_id}`); }
+    catch (e) { setError(e.message); }
+    finally { setBusy(false); }
   };
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`${API_BASE}/submit_answers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          quiz_id: quiz.id,
-          answers,
-          user_name: userName || "Anonym",
-        }),
-      });
-
-      if (!res.ok) throw new Error("Odeslání odpovědí selhalo");
-
-      const data = await res.json();
-      setResult(data);
-    } catch (err) {
-      setError(err.message);
-    }
-    setLoading(false);
-  };
-
-  return (
-    <div style={{ padding: 20 }}>
-      <h2>{quiz.title}</h2>
-
-      {!result && (
-        <div style={{ marginBottom: 20 }}>
-          <label>
-            Zadej své jméno (nepovinné):{" "}
-            <input
-              type="text"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              style={{ padding: 5 }}
-            />
-          </label>
-        </div>
-      )}
-
-      {quiz.questions.map((q, qIndex) => {
-        const detail = result
-          ? result.details.find((d) => d.index === qIndex)
-          : null;
-
-        return (
-          <div
-            key={qIndex}
-            style={{
-              marginBottom: 20,
-              padding: 10,
-              border: "1px solid #ddd",
-              borderRadius: 8,
-            }}
-          >
-            <p>
-              <strong>
-                {qIndex + 1}. {q.question}
-              </strong>
-            </p>
-            {q.options.map((opt, optIndex) => {
-              let style = {};
-              if (result && detail) {
-                if (optIndex === detail.correct_index && optIndex === detail.user_index) {
-                  style = { backgroundColor: "#c8e6c9" }; // zeleně správně vybrané
-                } else if (optIndex === detail.user_index && optIndex !== detail.correct_index) {
-                  style = { backgroundColor: "#ffcdd2" }; // červeně špatně vybrané
-                } else if (optIndex === detail.correct_index && optIndex !== detail.user_index) {
-                  style = { backgroundColor: "#e0e0e0" }; // šedě správná, ale nevybraná
-                }
-              }
-
-              return (
-                <label
-                  key={optIndex}
-                  style={{
-                    display: "block",
-                    marginBottom: 6,
-                    padding: 4,
-                    borderRadius: 4,
-                    ...style,
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name={`q-${qIndex}`}
-                    value={optIndex}
-                    checked={answers[qIndex] === optIndex}
-                    onChange={() => handleChange(qIndex, optIndex)}
-                    disabled={!!result}
-                  />{" "}
-                  {opt}
-                </label>
-              );
-            })}
-          </div>
-        );
-      })}
-
-      {!result ? (
-        <button
-          onClick={handleSubmit}
-          disabled={loading}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#1976d2",
-            color: "#fff",
-            border: "none",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
-          {loading ? "Odesílám..." : "Vyhodnotit"}
-        </button>
-      ) : (
-        <div style={{ marginTop: 20 }}>
-          <h3>Výsledek:</h3>
-          <p>
-            Skóre: {result.score}/{result.total} ({result.percentage}%)
-          </p>
-        </div>
-      )}
-    </div>
-  );
+  return <main className="narrow"><Link className="back-link" to="/">← Zpět ke kvízům</Link>
+    <div className="page-heading"><div><span className="eyebrow">Procvičování</span><h1>{quiz.title}</h1>
+      <p>Otázka {index + 1} z {quiz.questions.length} · Odpovězeno {answered}/{quiz.questions.length}</p></div></div>
+    <div className="progress-track"><span style={{ width: `${answered / quiz.questions.length * 100}%` }} /></div>
+    <section className="panel question-panel"><span className="tag">Otázka {index + 1}</span><h2>{question.question}</h2>
+      <div className="options">{question.options.map((option, optionIndex) => <label className={`option ${answers[index] === optionIndex ? "selected" : ""}`} key={optionIndex}>
+        <input type="radio" name={`question-${index}`} checked={answers[index] === optionIndex}
+          onChange={() => setAnswers({ ...answers, [index]: optionIndex })} />
+        <span className="option-letter">{String.fromCharCode(65 + optionIndex)}</span><span>{option}</span>
+      </label>)}</div></section>
+    <div className="step-actions"><button className="button secondary" disabled={index === 0} onClick={() => setIndex(index - 1)}>← Předchozí</button>
+      {index < quiz.questions.length - 1 ? <button className="button primary" onClick={() => setIndex(index + 1)}>Další →</button>
+        : <button className="button primary" disabled={busy} onClick={submit}>{busy ? "Vyhodnocuji…" : "Vyhodnotit kvíz"}</button>}</div>
+    {error && <p className="error" role="alert">{error}</p>}
+    <div className="question-dots" aria-label="Přechod na otázku">{quiz.questions.map((_, i) => <button key={i}
+      className={`${i === index ? "current" : ""} ${answers[i] !== undefined ? "done" : ""}`}
+      aria-label={`Otázka ${i + 1}`} onClick={() => setIndex(i)}>{i + 1}</button>)}</div>
+  </main>;
 }
