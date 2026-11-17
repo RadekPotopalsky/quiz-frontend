@@ -33,6 +33,7 @@ export default function CreateQuiz() {
   const generate = async (event) => {
     event.preventDefault(); setError("");
     if (!files.length) { setError("Nejdřív přilož fotky učebnice."); return; }
+    if (draft && !window.confirm("Nahradit rozpracovaný návrh novým kvízem?")) return;
     const form = new FormData();
     files.forEach(file => form.append("images", file));
     form.append("audience", audience); form.append("topic", topic); form.append("question_count", count);

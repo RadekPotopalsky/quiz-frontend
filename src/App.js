@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Link, Navigate, Route, Routes } from "react-router-dom";
 import { getMe, getToken, login, setToken } from "./api";
 import QuizList from "./pages/QuizList";
@@ -35,10 +35,20 @@ function Login({ onLogin }) {
 export default function App() {
   const [account, setAccount] = useState(null);
   const [checking, setChecking] = useState(!!getToken());
-  useEffect(() => {
-    if (getToken()) getMe().then(setAccount).catch(() => setToken(null)).finally(() => setChecking(false));
+  const [startupError, setStartupError] = useState("");
+  const verifySession = useCallback(() => {
+    setChecking(true); setStartupError("");
+    getMe().then(setAccount).catch(error => {
+      if (error.status === 401) setToken(null);
+      else setStartupError(error.message);
+    }).finally(() => setChecking(false));
   }, []);
+  useEffect(() => {
+    if (getToken()) verifySession();
+  }, [verifySession]);
   if (checking) return <div className="center-message">Načítám účet…</div>;
+  if (startupError) return <div className="center-message"><p className="error">{startupError}</p>
+    <button className="button primary" onClick={verifySession}>Zkusit znovu</button></div>;
   if (!account) return <Login onLogin={setAccount} />;
   const admin = account.role === "admin";
   return <BrowserRouter>

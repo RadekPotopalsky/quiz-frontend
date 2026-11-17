@@ -12,10 +12,16 @@ async function api(path, options = {}) {
   try {
     response = await fetch(`${API_BASE}${path}`, { ...options, headers });
   } catch (_) {
-    throw new Error("Server není dostupný. Na bezplatném Renderu může první načtení chvíli trvat.");
+    const error = new Error("Server není dostupný. Na bezplatném Renderu může první načtení chvíli trvat.");
+    error.status = 0;
+    throw error;
   }
   const data = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(data.error || `Server vrátil chybu ${response.status}.`);
+  if (!response.ok) {
+    const error = new Error(data.error || `Server vrátil chybu ${response.status}.`);
+    error.status = response.status;
+    throw error;
+  }
   return data;
 }
 
