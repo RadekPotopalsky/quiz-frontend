@@ -82,13 +82,13 @@ export default function CreateQuiz() {
       <p>Vyfoť stránky nebo vyber fotky z galerie. AI připraví návrh, který před zveřejněním zkontroluješ.</p></div></div>
     <form className="panel form-panel" onSubmit={generate}>
       <h2>1. Podklady</h2><div className="upload-actions"><label className="button secondary upload-button">📷 Vyfotit stránku
-        <input type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={capturePhoto} /></label>
+        <input type="file" accept="image/*" capture="environment" onChange={capturePhoto} /></label>
         <label className="button secondary upload-button">＋ Vybrat z galerie
           <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={e => { addFiles(e.target.files); e.target.value = ""; }} /></label></div>
       {showCameraNext && files.length > 0 && files.length < 10 && <div className="camera-next" role="status"><span>Fotka je vložená. Můžeš hned pokračovat.</span>
         <button type="button" className="button secondary" onClick={() => setShowCameraNext(false)}>Hotovo</button>
         <label className="button primary upload-button">📷 Fotit další
-          <input type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={capturePhoto} /></label></div>}
+          <input type="file" accept="image/*" capture="environment" onChange={capturePhoto} /></label></div>}
       {files.length > 0 && <div className="file-list"><strong>Fotografie ({files.length}/10)</strong>{files.map((file, index) => <div key={`${file.name}-${index}`}>
         {previews[index] && <a href={previews[index]} target="_blank" rel="noreferrer" title="Otevřít fotografii"><img className="file-thumb" src={previews[index]} alt={`Fotografie ${index + 1}`} /></a>}
         <span>{index + 1}. {file.name}</span><button type="button" className="link-button" onClick={() => setFiles(files.filter((_, i) => i !== index))}>Odebrat</button></div>)}</div>}
