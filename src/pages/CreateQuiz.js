@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createQuiz, generateQuiz, getPreferences, savePreferences } from "../api";
 import AutoGrowTextarea from "../AutoGrowTextarea";
-import CameraCapture from "../CameraCapture";
 import shuffleQuiz from "../shuffleQuiz";
 
 const DRAFT_KEY = "quiz_draft_v2";
@@ -17,7 +16,7 @@ export default function CreateQuiz() {
   const [savingPreference, setSavingPreference] = useState(false);
   const [topic, setTopic] = useState("");
   const [count, setCount] = useState("15");
-  const [cameraOpen, setCameraOpen] = useState(false);
+  const [showCameraNext, setShowCameraNext] = useState(false);
   const [draft, setDraft] = useState(() => {
     try { return JSON.parse(sessionStorage.getItem(DRAFT_KEY) || "null"); } catch (_) { return null; }
   });
@@ -42,6 +41,10 @@ export default function CreateQuiz() {
     }
     setError(""); setFiles(next);
     return true;
+  };
+  const capturePhoto = event => {
+    if (event.target.files?.length && addFiles(event.target.files)) setShowCameraNext(true);
+    event.target.value = "";
   };
   const saveAudience = async () => {
     setError(""); setPreferenceMessage(""); setSavingPreference(true);
@@ -78,13 +81,14 @@ export default function CreateQuiz() {
     <div className="page-heading"><div><span className="eyebrow">Správa kvízů</span><h1>Nový kvíz</h1>
       <p>Vyfoť stránky nebo vyber fotky z galerie. AI připraví návrh, který před zveřejněním zkontroluješ.</p></div></div>
     <form className="panel form-panel" onSubmit={generate}>
-      <h2>1. Podklady</h2><div className="upload-actions"><button type="button" className="button secondary" onClick={() => {
-        if (files.length >= 10) setError("Lze přiložit nejvýše 10 fotografií.");
-        else setCameraOpen(true);
-      }}>📷 Fotit více stránek</button><label className="button secondary upload-button">Systémový fotoaparát
-        <input type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={e => { addFiles(e.target.files); e.target.value = ""; }} /></label>
+      <h2>1. Podklady</h2><div className="upload-actions"><label className="button secondary upload-button">📷 Vyfotit stránku
+        <input type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={capturePhoto} /></label>
         <label className="button secondary upload-button">＋ Vybrat z galerie
           <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={e => { addFiles(e.target.files); e.target.value = ""; }} /></label></div>
+      {showCameraNext && files.length > 0 && files.length < 10 && <div className="camera-next" role="status"><span>Fotka je vložená. Můžeš hned pokračovat.</span>
+        <button type="button" className="button secondary" onClick={() => setShowCameraNext(false)}>Hotovo</button>
+        <label className="button primary upload-button">📷 Fotit další
+          <input type="file" accept="image/jpeg,image/png,image/webp" capture="environment" onChange={capturePhoto} /></label></div>}
       {files.length > 0 && <div className="file-list"><strong>Fotografie ({files.length}/10)</strong>{files.map((file, index) => <div key={`${file.name}-${index}`}>
         {previews[index] && <a href={previews[index]} target="_blank" rel="noreferrer" title="Otevřít fotografii"><img className="file-thumb" src={previews[index]} alt={`Fotografie ${index + 1}`} /></a>}
         <span>{index + 1}. {file.name}</span><button type="button" className="link-button" onClick={() => setFiles(files.filter((_, i) => i !== index))}>Odebrat</button></div>)}</div>}
@@ -114,6 +118,5 @@ export default function CreateQuiz() {
       <div className="step-actions"><button className="button secondary" onClick={() => { if (window.confirm("Zahodit návrh kvízu?")) setDraft(null); }}>Zahodit návrh</button>
         <button className="button primary" disabled={busy} onClick={publish}>{busy ? "Ukládám…" : "Zveřejnit kvíz"}</button></div>
     </section>}
-    {cameraOpen && <CameraCapture remaining={10 - files.length} onAccept={file => addFiles([file])} onClose={() => setCameraOpen(false)} />}
   </main>;
 }

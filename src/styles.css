@@ -31,19 +31,8 @@
 .draft-options textarea{flex:1;min-width:0;width:100%;padding:9px 11px;border:1px solid #cdd8e6;border-radius:9px;color:#18212f;background:#fff}
 .draft-options>div{align-items:flex-start}
 .draft-options input[type=radio]{flex:none;margin-top:14px}
-.camera-overlay{position:fixed;inset:0;z-index:200;background:rgba(11,21,37,.88);display:flex;align-items:center;justify-content:center;padding:12px}
-.camera-dialog{width:min(100%,760px);height:min(92dvh,900px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:18px}
-.camera-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 18px}
-.camera-header strong,.camera-header span{display:block}
-.camera-header span{font-size:.85rem;color:#687489;margin-top:3px}
-.camera-close{width:40px;height:40px;border:0;background:#f0f3f8;border-radius:10px;font-size:1.7rem;line-height:1}
-.camera-preview{position:relative;flex:1;min-height:180px;display:grid;place-items:center;overflow:hidden;background:#0b1525}
-.camera-preview video,.camera-preview img{width:100%;height:100%;object-fit:contain}
-.camera-preview img{position:absolute;inset:0}
-.camera-dialog .error{margin:10px 14px 0}
-.camera-actions{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px 4px}
-.camera-hint{font-size:.82rem;color:#687489;margin:2px 16px 12px;text-align:right}
-.camera-fallback{align-self:flex-end;margin:8px 16px 14px}
+.camera-next{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 14px;margin:-4px 0 18px;border:1px solid #cfe3d6;border-radius:12px;background:#effaf2}
+.camera-next span{flex:1;min-width:170px;color:#176b34;font-weight:650}
 
 @media(max-width:700px){
   .header-inner{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;padding:9px 12px}
@@ -54,7 +43,5 @@
   .header-create-short{display:inline}
   .user-box{gap:0}
   .user-box .link-button{font-size:.82rem;padding:3px}
-  .camera-overlay{padding:0}
-  .camera-dialog{height:100dvh;border-radius:0}
-  .camera-actions .button{flex:1;padding:9px 7px;min-width:0}
+  .camera-next .button{flex:1}
 }

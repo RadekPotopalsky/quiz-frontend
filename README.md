@@ -5,8 +5,8 @@ výsledky. Administrátor může z fotografie nebo galerie vytvořit návrh pře
 zkontrolovat otázky, citace a správné odpovědi, pak kvíz zveřejnit. Může také
 spravovat účty a mazat kvízy.
 
-U nového kvízu lze otevřít rychlé focení s volbami Opakovat, OK a OK +
-(vložit a pokračovat ve focení), použít systémový fotoaparát nebo galerii.
+U nového kvízu lze použít systémový fotoaparát nebo galerii. Po potvrzení
+fotky v systémovém fotoaparátu se ve formuláři objeví tlačítko Fotit další.
 Výchozí cílová skupina se ukládá u administrátorského účtu a načte se na
 dalším zařízení. Návrh zůstává v `sessionStorage` otevřené karty.
 
